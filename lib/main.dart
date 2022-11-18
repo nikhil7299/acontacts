@@ -32,8 +32,10 @@ class _MyAppState extends State<MyApp> {
 class Contact {
   final String id;
   final String name;
+  final String phone;
   Contact({
     required this.name,
+    required this.phone,
   }) : id = const Uuid().v4();
 }
 
@@ -116,6 +118,7 @@ class HomePage extends StatelessWidget {
                     elevation: 6.0,
                     child: ListTile(
                       title: Text(contact.name),
+                      subtitle: Text(contact.phone),
                     ),
                   ),
                 );
@@ -141,16 +144,19 @@ class NewContactView extends StatefulWidget {
 
 class _NewContactViewState extends State<NewContactView> {
   late final TextEditingController _controller;
+  late final TextEditingController _phoneController;
 
   @override
   void initState() {
     _controller = TextEditingController();
+    _phoneController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -165,12 +171,21 @@ class _NewContactViewState extends State<NewContactView> {
           TextField(
             controller: _controller,
             decoration: InputDecoration(
-              hintText: 'Enter a new contact name here..',
+              hintText: 'Enter a new contact name',
             ),
           ),
+          SizedBox(height: 20),
+          TextField(
+            controller: _phoneController,
+            decoration: InputDecoration(
+              hintText: 'Enter phone number',
+            ),
+          ),
+          SizedBox(height: 20),
           TextButton(
             onPressed: () {
-              final contact = Contact(name: _controller.text);
+              final contact =
+                  Contact(name: _controller.text, phone: _phoneController.text);
               ContactBook().add(contact: contact);
               Navigator.of(context).pop();
             },
